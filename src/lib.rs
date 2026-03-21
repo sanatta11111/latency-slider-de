@@ -93,37 +93,10 @@ unsafe fn non_hdr_update_room_hook(_: &skyline::hooks::InlineCtx) {
         }
     }
 
-    if STEALTH_MODE {
-        set_text_string(
-            CURRENT_PANE_HANDLE as u64,
-            format!("ID: {}\0", CURRENT_ARENA_ID).as_ptr(),
-        );
-    } else if CURRENT_INPUT_BUFFER == -1 {
-        if MOST_RECENT_AUTO == -1 {
-            set_text_string(
-                CURRENT_PANE_HANDLE as u64,
-                format!("ID: {}\nInput Latency: Auto\0", CURRENT_ARENA_ID).as_ptr(),
-            );
-        } else {
-            set_text_string(
-                CURRENT_PANE_HANDLE as u64,
-                format!(
-                    "ID: {}\nInput Latency: Auto ({})\0",
-                    CURRENT_ARENA_ID, MOST_RECENT_AUTO
-                )
-                .as_ptr(),
-            )
-        }
-    } else {
-        set_text_string(
-            CURRENT_PANE_HANDLE as u64,
-            format!(
-                "ID: {}\nInput Latency: {}\0",
-                CURRENT_ARENA_ID, CURRENT_INPUT_BUFFER
-            )
-            .as_ptr(),
-        );
-    }
+  set_text_string(
+        CURRENT_PANE_HANDLE as u64,
+        format!("ID: {}\0", CURRENT_ARENA_ID).as_ptr(),
+    );
 }
 
 #[skyline::hook(offset = LOC_SET_ROOM_ID.get_offset_in_memory().unwrap(), inline)]
