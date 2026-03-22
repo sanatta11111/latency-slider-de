@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   check:
-    name: "Publish Stable Release"
+    name: "Build and Save Mod"
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,19 +26,7 @@ jobs:
         run: |
           nix flake check --print-build-logs -j auto
 
-      - name: "Determine release"
-        id: det-rel
-        run: |
-          version=$(nix eval .#packages.x86_64-linux.default.version --raw)
-
-          if [ $(git tag -l "v$version") ]; then
-            echo "releasever=none" >> $GITHUB_OUTPUT
-          else
-            echo "releasever=$version" >> $GITHUB_OUTPUT
-          fi
-
       - name: "Build Release"
-        if: steps.det-rel.outputs.releasever != 'none'
         run: |
           nix build .# --print-build-logs -j auto
           nix build .#latency-slider-de-classic --print-build-logs -j auto -o result-classic
